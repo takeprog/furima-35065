@@ -6,11 +6,15 @@ class User < ApplicationRecord
 
   with_options presence: true do
     validates :nickname
-    validates :last_name, format: {with: /\A[ぁ-んァ-ヶ一-龥々ー]+\z/} #全角かな、カナ、漢字のみ
-    validates :first_name, format: {with: /\A[ぁ-んァ-ヶ一-龥々ー]+\z/} 
-    validates :kana_last_name, format: {with: /\A[ァ-ヶー]+\z/} #全角カナのみ
-    validates :kana_first_name, format: {with: /\A[ァ-ヶー]+\z/}
     validates :birthday, format: { with: /\A\d{4}-\d{2}-\d{2}\z/ } #2019-10-04"のような形でのみ
+  end
+  with_options presence: true, format: {with: /\A[ぁ-んァ-ヶ一-龥々ー]+\z/} do #全角かな、カナ、漢字のみ
+    validates :last_name
+    validates :first_name
+  end
+  with_options presence: true, format: {with: /\A[ァ-ヶー]+\z/} do #全角カナのみ
+    validates :kana_last_name
+    validates :kana_first_name
   end
 
   PASSWORD_REGEX = /\A(?=.*?[a-z])(?=.*?[\d])[a-z\d]+\z/i.freeze
