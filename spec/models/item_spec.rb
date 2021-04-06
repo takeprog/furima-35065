@@ -6,162 +6,117 @@ RSpec.describe Item, type: :model do
   end
 
 
-  describe 'ユーザー新規登録' do
-    context 'ユーザ新規登録ができる時' do
+  describe '商品出品' do
+    context '商品出品ができる時' do
       # 値の存在有無による挙動確認
-      it 'name、email、password、password_confirmation、last_name、first_name、kana_last_name、kana_first_name、birthdayが存在すれば登録できる' do
-        expect(@user).to be_valid
+      it 'product_name,explanation,category_id,product_status_id,delivery_fee_id,prefecture_id,shipping_day_id,priceが存在すれば登録できる' do
+        expect(@item).to be_valid
       end
-      # passwordのバリデーション確認 
-      it 'passwordは半角英数字混合である場合登録できる' do
-        @user.password = '111aaa'
-        @user.password_confirmation = '111aaa'
-        expect(@user).to be_valid
+      # priceのバリデーション確認 
+      it 'priceは半角数字であれば登録できる' do
+        @item.price = 1000
+        expect(@item).to be_valid
       end
-      it 'passwordが6文字以上であれば登録できる' do
-        @user.password = '12345a'
-        @user.password_confirmation = '12345a'
-        expect(@user).to be_valid
-      end
-      # 名前のバリデーション確認
-      it 'last_nameは全角（漢字、ひらがな、カタカナ）であれば登録できる' do
-        @user.last_name = '漢字ひらがなカタカナ'
-        expect(@user).to be_valid
-      end      
-      it 'first_nameは全角（漢字、ひらがな、カタカナ）であれば登録できる' do
-        @user.first_name = '漢字ひらがなカタカナ'
-        expect(@user).to be_valid
-      end
-      # 名前（カナ）のバリデーション確認
-      it 'kana_last_nameは全角カタカナであれば登録できる' do
-        @user.kana_last_name = 'カタカナ'
-        expect(@user).to be_valid
-      end      
-      it 'kana_first_nameは全角カタカナであれば登録できる' do
-        @user.kana_first_name = 'カタカナ'
-        expect(@user).to be_valid
+      it 'priceが¥300~¥9,999,999であれば登録できる' do
+        @item.price = 300
+        expect(@item).to be_valid
       end
     end
-    
-    context 'ユーザ新規登録ができない時' do
+      
+    context '商品出品ができない時' do
       # 値の存在有無による挙動確認
-      it 'nicknameが空では登録できない' do
-        @user.nickname = ''
-        @user.valid?
-        expect(@user.errors.full_messages).to include("ニックネームを入力してください")
+      it 'product_nameが空では登録できない' do
+        @item.product_name = ''
+        @item.valid?
+        expect(@item.errors.full_messages).to include("Product nameを入力してください")
       end
-      it 'emailが空では登録できない' do
-        @user.email = ''
-        @user.valid?
-        expect(@user.errors.full_messages).to include("Eメールを入力してください")
+      it 'explanation が空では登録できない' do
+        @item.explanation = ''
+        @item.valid?
+        expect(@item.errors.full_messages).to include("Explanationを入力してください")
       end
-      it 'passwordが空では登録できないこと' do
-        @user.password = ''
-        @user.valid?
-        expect(@user.errors.full_messages).to include("パスワードを入力してください")
+      it ' category_idが空では登録できないこと' do
+        @item.category_id = ''
+        @item.valid?    
+        expect(@item.errors.full_messages).to include("Categoryを選択して下さい")
       end
-      it 'last_name が空では登録できないこと' do
-        @user.last_name = ''
-        @user.valid?
-        expect(@user.errors.full_messages).to include("Last nameを入力してください")
+      it 'product_status_id が空では登録できないこと' do
+        @item.product_status_id = ''
+        @item.valid?
+        expect(@item.errors.full_messages).to include("Product statusを選択して下さい")
       end
-      it 'first_nameが空では登録できないこと' do
-        @user.first_name = ''
-        @user.valid?
-        expect(@user.errors.full_messages).to include("First nameを入力してください")
+      it 'delivery_fee_idが空では登録できないこと' do
+        @item.delivery_fee_id = ''
+        @item.valid?
+        expect(@item.errors.full_messages).to include("Delivery feeを選択して下さい")
       end
-      it 'kana_last_nameが空では登録できないこと' do
-        @user.kana_last_name = ''
-        @user.valid?
-        expect(@user.errors.full_messages).to include("Kana last nameを入力してください")
+      it 'prefecture_idが空では登録できないこと' do
+        @item.prefecture_id = ''
+        @item.valid?
+        expect(@item.errors.full_messages).to include("Prefectureを選択して下さい")
       end
-      it 'kana_first_nameが空では登録できないこと' do
-        @user.kana_first_name = ''
-        @user.valid?
-        expect(@user.errors.full_messages).to include("Kana first nameを入力してください")
+      it 'shipping_day_idが空では登録できないこと' do
+        @item.shipping_day_id = ''
+        @item.valid?
+        expect(@item.errors.full_messages).to include("Shipping dayを選択して下さい")
       end
-      it 'birthday が空では登録できないこと' do
-        @user.birthday = ''
-        @user.valid?
-        expect(@user.errors.full_messages).to include("誕生日を入力してください")
+      it 'priceが空では登録できないこと' do
+        @item.price = ''
+        @item.valid?
+        expect(@item.errors.full_messages).to include("Priceを入力してください")
       end
-      # emailバリデーション確認
-      it 'emailは@を含んでいないと登録できない' do
-        @user.email = 'aaaaaa'
-        @user.valid?
-        expect(@user.errors.full_messages).to include("Eメールは不正な値です")
+      it 'imageが空では登録できないこと' do
+        @item.image = nil
+        @item.valid?
+        expect(@item.errors.full_messages).to include("Imageを入力してください")
       end
-      it '重複したemailが存在する場合登録できないこと' do
-        @user.save
-        another_user = FactoryBot.build(:user, email: @user.email)
-        another_user.valid?
-        expect(another_user.errors.full_messages).to include('Eメールはすでに存在します')
+      # priceバリデーション確認
+      it 'priceは全角では登録できない' do
+        @item.price = '１０００'
+        @item.valid? 
+        expect(@item.errors.full_messages).to include("Priceは数値で入力してください")
       end
-      # passwordのバリデーション確認  
-      it 'passwordは半角数字のみでは登録できない' do
-        @user.password = '123456'
-        @user.password_confirmation = '123456'
-        @user.valid?
-        expect(@user.errors.full_messages).to include("パスワードには英字と数字の両方を含めて設定してください")
-      end
-      it 'passwordは半角英のみでは登録できない' do
-        @user.password = 'aaaaaa'
-        @user.password_confirmation = 'aaaaaa'
-        @user.valid?
-        expect(@user.errors.full_messages).to include("パスワードには英字と数字の両方を含めて設定してください")
-      end
-      it 'passwordが全角では登録できないこと' do
-        @user.password = '１１１ａａａ'
-        @user.password_confirmation = '１１１ａａａ'
-        @user.valid?
-        expect(@user.errors.full_messages).to include("パスワードには英字と数字の両方を含めて設定してください")
-      end
-      it 'passwordが5文字以下であれば登録できないこと' do
-        @user.password = '1234a'
-        @user.password_confirmation = '1234a'
-        @user.valid?
-        expect(@user.errors.full_messages).to include('パスワードは6文字以上で入力してください')
-      end
-      it 'passwordとpassword_confirmationが不一致では登録できないこと' do
-        @user.password = '12345a'
-        @user.password_confirmation = '12345a7'
-        @user.valid?
-        expect(@user.errors.full_messages).to include("パスワード（確認用）とパスワードの入力が一致しません")
-      end
-      # 名前のバリデーション確認
-      it 'last_nameは半角英数字では登録出来ない' do
-        @user.last_name = 'aaa111'
-        @user.valid?
-        expect(@user.errors.full_messages).to include("Last nameは不正な値です")
-      end
-      it 'first_nameは半角英数字では登録出来ない' do
-        @user.first_name = 'aaa111'
-        @user.valid?
-        expect(@user.errors.full_messages).to include("First nameは不正な値です")
-      end
-      # 名前（カナ）のバリデーション確認
-      it 'kana_last_nameは全角（漢字、ひらがな）では登録できない' do
-        @user.kana_last_name = '漢字ひらがな'
-        @user.valid?
-        expect(@user.errors.full_messages).to include("Kana last nameは不正な値です")
-      end
-      it 'kana_last_nameは半角英数字では登録出来ない' do
-        @user.kana_last_name = 'aaa111'
-        @user.valid?
-        expect(@user.errors.full_messages).to include("Kana last nameは不正な値です")
-      end
-      it 'kana_first_nameは全角（漢字、ひらがな）では登録できない' do
-        @user.kana_first_name = '漢字ひらがな'
-        @user.valid?
-        expect(@user.errors.full_messages).to include("Kana first nameは不正な値です")
-      end
-      it 'kana_first_nameは半角英数字では登録出来ない' do
-        @user.kana_first_name = 'aaa111'
-        @user.valid?
-        expect(@user.errors.full_messages).to include("Kana first nameは不正な値です")
-      end 
-    end    
-  end  
-end
 
+
+      it 'priceは¥300未満では登録出来ない' do
+        @item.price = 200
+        @item.valid?
+        expect(@item.errors.full_messages).to include('Priceは300以上の値にしてください')
+      end
+      it 'priceは¥10,000,000以上では登録できない' do
+        @item.price=100000000
+        @item.valid?
+        expect(@item.errors.full_messages).to include('Priceは9999999以下の値にしてください')
+      end
+      # アクティブハッシュのバリデーション確認  
+      it 'category_idは「--」を選択したままでは登録できない' do
+        @item.category_id = 1
+        @item.valid?     
+        expect(@item.errors.full_messages).to include("Categoryを選択して下さい")
+      end
+      it 'product_status_idは「--」を選択したままでは登録できない' do
+        @item.product_status_id = 1
+        @item.valid?
+        expect(@item.errors.full_messages).to include("Product statusを選択して下さい")
+      end
+      it 'delivery_fee_idは「--」を選択したままでは登録できない' do
+        @item.delivery_fee_id = 1
+        @item.valid?
+        expect(@item.errors.full_messages).to include("Delivery feeを選択して下さい")
+      end
+      it 'prefecture_id は「--」を選択したままでは登録できない' do
+        @item.prefecture_id = 1
+        @item.valid?
+        expect(@item.errors.full_messages).to include("Prefectureを選択して下さい")
+      end
+      it 'shipping_day_idは「--」を選択したままでは登録できない' do
+        @item.shipping_day_id = 1
+        @item.valid?
+        expect(@item.errors.full_messages).to include("Shipping dayを選択して下さい")
+      end
+
+    end 
+
+  end  
+  
 end
