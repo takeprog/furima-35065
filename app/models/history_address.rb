@@ -1,6 +1,6 @@
 class HistoryAddress
   include ActiveModel::Model
-  attr_accessor :user_id, :item_id, :postal_code, :prefecture_id, :city, :address, :building, :phone_number
+  attr_accessor :user_id, :item_id, :postal_code, :prefecture_id, :city, :address, :building, :phone_number, :token
 
   with_options presence: true do
     validates :postal_code, format: { with: /\A\d{3}[-]\d{4}\z/ }
@@ -10,6 +10,7 @@ class HistoryAddress
     validates :phone_number,  numericality: {only_integer: true, less_than_or_equal_to: 99999999999}
     validates :user_id
     validates :item_id
+    validates :token
   end
 
   def save

@@ -11,7 +11,7 @@ RSpec.describe HistoryAddress, type: :model do
   describe '商品購入' do
     context '商品購入ができる時' do
       # 値の存在有無による挙動確認
-      it 'postal_code,prefecture_id,city,address,phone_numberが存在すれば登録できる' do
+      it 'postal_code,prefecture_id,city,address,phone_number,tokenが存在すれば登録できる' do
         expect(@history_address).to be_valid
       end
       # phone_numberのバリデーション確認 
@@ -53,7 +53,12 @@ RSpec.describe HistoryAddress, type: :model do
         @history_address.valid?
         expect(@history_address.errors.full_messages).to include("Phone numberを入力してください")
       end
-    #   # phone_numberのバリデーション確認 
+      it 'tokenが空では登録できないこと' do
+        @history_address.token = nil
+        @history_address.valid? 
+        expect(@history_address.errors.full_messages).to include("Tokenを入力してください")
+      end
+      # phone_numberのバリデーション確認 
       it 'phone_numberは12桁以上では登録できない' do
         @history_address.phone_number = 111111111111
         @history_address.valid?
