@@ -1,6 +1,7 @@
 class PurchaseHistoriesController < ApplicationController
   before_action :authenticate_user!
   before_action :move_to_index
+  before_action :move_to_root
   
   def index
      @item = Item.find(params[:item_id])
@@ -38,6 +39,13 @@ private
       card: history_params[:token],
       currency: 'jpy'
     )
+  end
+
+  def move_to_root
+    @item = Item.find(params[:item_id])
+    unless @item.purchase_history == nil
+      redirect_to root_path
+    end
   end
    
 end
