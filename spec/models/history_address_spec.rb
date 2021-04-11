@@ -16,7 +16,7 @@ RSpec.describe HistoryAddress, type: :model do
       end
       # phone_numberのバリデーション確認 
       it 'phone_numberは11桁以内の数値であれば登録できる' do
-        @history_address.phone_number = 11111111111
+        @history_address.phone_number = '11111111111'
         expect(@history_address).to be_valid
       end
       # postal_codeのバリデーション確認 
@@ -24,10 +24,26 @@ RSpec.describe HistoryAddress, type: :model do
         @history_address.postal_code = '123-4567'
         expect(@history_address).to be_valid
       end
+      # buildingのバリデーション確認 
+      it 'buildingが空でも登録できる' do
+        @history_address.building = ''
+        expect(@history_address).to be_valid
+      end
     end
       
     context '商品購入ができない時' do
        # 値の存在有無による挙動確認
+       it 'item_idが空だと登録できないこと' do
+        @history_address.item_id = ''
+        @history_address.valid?
+        expect(@history_address.errors.full_messages).to include("Itemを入力してください")
+      end
+      it 'user_idが空だと登録できないこと' do
+        @history_address.user_id = ''
+        @history_address.valid?
+        binding.pry
+        expect(@history_address.errors.full_messages).to include("Userを入力してください")
+      end
       it 'postal_codeが空では登録できない' do
         @history_address.postal_code = ''
         @history_address.valid?
@@ -60,7 +76,7 @@ RSpec.describe HistoryAddress, type: :model do
       end
       # phone_numberのバリデーション確認 
       it 'phone_numberは12桁以上では登録できない' do
-        @history_address.phone_number = 111111111111
+        @history_address.phone_number = '111111111111'
         @history_address.valid?
         expect(@history_address.errors.full_messages).to include("Phone numberは99999999999以下の値にしてください")
       end
