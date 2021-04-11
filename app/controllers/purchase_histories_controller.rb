@@ -1,15 +1,14 @@
 class PurchaseHistoriesController < ApplicationController
+  before_action :set_item, only: [:index, :create]
   before_action :authenticate_user!
   before_action :move_to_index
   before_action :move_to_root
   
   def index
-     @item = Item.find(params[:item_id])
      @history_address=HistoryAddress.new
   end
   
   def create
-    @item = Item.find(params[:item_id])
     @history_address=HistoryAddress.new(history_params)
     if @history_address.valid?
       pay_item
@@ -42,10 +41,12 @@ private
   end
 
   def move_to_root
-    @item = Item.find(params[:item_id])
     unless @item.purchase_history == nil
       redirect_to root_path
     end
   end
    
+  def set_item
+    @item = Item.find(params[:item_id])
+  end
 end
