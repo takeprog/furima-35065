@@ -4,6 +4,7 @@ RSpec.describe HistoryAddress, type: :model do
   before do
     user = FactoryBot.create(:user)
     item = FactoryBot.create(:item)
+    sleep 0.1
     @history_address = FactoryBot.build(:history_address, user_id: user.id, item_id: item.id)
   end
 
@@ -41,7 +42,6 @@ RSpec.describe HistoryAddress, type: :model do
       it 'user_idが空だと登録できないこと' do
         @history_address.user_id = ''
         @history_address.valid?
-        binding.pry
         expect(@history_address.errors.full_messages).to include("Userを入力してください")
       end
       it 'postal_codeが空では登録できない' do
@@ -76,18 +76,23 @@ RSpec.describe HistoryAddress, type: :model do
       end
       # phone_numberのバリデーション確認 
       it 'phone_numberは12桁以上では登録できない' do
-        @history_address.phone_number = '111111111111'
+        @history_address.phone_number = '123456789123'
         @history_address.valid?
-        expect(@history_address.errors.full_messages).to include("Phone numberは99999999999以下の値にしてください")
+        expect(@history_address.errors.full_messages).to include("Phone numberは不正な値です")
       end
       it 'phone_numberは数字以外は入力できない' do
         @history_address.phone_number = '111-111-111'
-        @history_address.valid? 
-        expect(@history_address.errors.full_messages).to include("Phone numberは数値で入力してください")
+        @history_address.valid?
+        expect(@history_address.errors.full_messages).to include("Phone numberは不正な値です")
+      end
+      it '英数混合では登録できないこと' do
+        @history_address.phone_number = '123456789ab'
+        @history_address.valid?
+        expect(@history_address.errors.full_messages).to include("Phone numberは不正な値です")
       end
       # postal_codeのバリデーション確認 
       it 'postal_codeはハイフンが含まれない場合は登録できない' do
-        @history_address.postal_code = 1234567
+        @history_address.postal_code = '1234567'
         @history_address.valid? 
         expect(@history_address.errors.full_messages).to include("Postal codeは不正な値です")
       end

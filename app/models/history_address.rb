@@ -7,7 +7,7 @@ class HistoryAddress
     validates :city
     validates :address
     validates :prefecture_id, numericality: { other_than: 1, message: "を選択して下さい" }
-    validates :phone_number,  numericality: {only_integer: true, less_than_or_equal_to: 99999999999}
+    validates :phone_number,  format: { with: /\A\d{,11}\z/ }
     validates :user_id
     validates :item_id
     validates :token
