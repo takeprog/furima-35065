@@ -24,15 +24,13 @@
         <%= @item.delivery_fee.name %>
       </span>
     </div>
-    <% if @item.purchase_history == nil %>
-      <% if user_signed_in? %>
-        <% if  current_user.id == @item.user_id %>
-          <%= link_to "商品の編集", edit_item_path, method: :get, class: "item-red-btn" %>
-          <p class="or-text">or</p>
-          <%= link_to "削除", item_path(@item.id), method: :delete, class:"item-destroy" %>
-        <% else %>
-          <%= link_to "購入画面に進む", item_purchase_histories_path(@item.id), class:"item-red-btn"%>
-        <% end %>
+    <% if @item.purchase_history == nil && user_signed_in? %>
+      <% if  current_user.id == @item.user_id %>
+        <%= link_to "商品の編集", edit_item_path, method: :get, class: "item-red-btn" %>
+        <p class="or-text">or</p>
+        <%= link_to "削除", item_path(@item.id), method: :delete, class:"item-destroy" %>
+      <% else %>
+        <%= link_to "購入画面に進む", item_purchase_histories_path(@item.id), class:"item-red-btn"%>
       <% end %>
     <% end %>
 
